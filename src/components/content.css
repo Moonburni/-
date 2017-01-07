@@ -1,0 +1,31 @@
+.content>ul{
+    width: 90%;
+    overflow: hidden;
+    height: 40px;
+    margin-left: 40px;
+}
+.content>ul>li{
+    float: left;
+    margin-left: 30px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+}
+.content>ul>li>a{
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    display: inline-block;
+    color: #666666;
+}
+.content>ul>li>a:hover{
+    color:#F06444;
+    border-bottom:solid 4px #F06444
+}
+.content>ul>li:first-child{
+    margin-left: 5px;
+}
+.content{
+    height: auto;
+    padding-bottom: 20px;
+}

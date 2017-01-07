@@ -1,0 +1,24 @@
+.side{
+    position: fixed;
+    width: 200px;
+    background-color: #404040;
+    height: 100%;
+    top: 0;
+    left: 0;
+    padding-top: 50px;
+}
+.ant-menu-dark .ant-menu-item:hover, .ant-menu-dark .ant-menu-submenu-active, .ant-menu-dark .ant-menu-submenu-selected{
+    background-color: transparent;
+}
+.ant-menu-dark, .ant-menu-dark .ant-menu-sub,.ant-menu-dark .ant-menu-item, .ant-menu-dark .ant-menu-item > a{
+    color: #666666;
+}
+.ant-menu-dark .ant-menu-submenu-selected{
+    border-left: solid 4px  #F06444;
+    background-color: transparent;
+    color:#ffffff;
+}
+.ant-menu-dark.ant-menu-inline .ant-menu-item-selected>a,.ant-menu-dark.ant-menu-inline .ant-menu-item-selected{
+    color:#ffffff;
+    background-color: transparent;
+}

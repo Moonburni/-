@@ -1,0 +1,8 @@
+.header{
+    height: 50px;
+    background-color: white;
+    width: calc(100% - 200px);
+    position: fixed;
+    top: 0;
+    right: 0;
+}

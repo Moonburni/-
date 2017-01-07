@@ -1,0 +1,20 @@
+header{
+    height: 60px;
+    width: 100%;
+    text-align: center;
+    font-size: 18px;
+    line-height: 60px;
+    border-bottom: solid 1px rgba(33,33,33,0.2);
+}
+.login-main{
+    width: 384px;
+    height: 345px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-top: -156px;
+    margin-left: -172px;
+    padding: 32px;
+    background-color: #ffffff;
+    border-radius: 5px;
+}
