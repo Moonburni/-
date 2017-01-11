@@ -6,19 +6,26 @@
     top: 0;
     left: 0;
     padding-top: 50px;
+    background-image: url("../../images/左侧背景.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 .ant-menu-dark .ant-menu-item:hover, .ant-menu-dark .ant-menu-submenu-active, .ant-menu-dark .ant-menu-submenu-selected{
-    background-color: transparent;
+    background-color: #251a3e;
 }
 .ant-menu-dark, .ant-menu-dark .ant-menu-sub,.ant-menu-dark .ant-menu-item, .ant-menu-dark .ant-menu-item > a{
     color: #666666;
 }
 .ant-menu-dark .ant-menu-submenu-selected{
-    border-left: solid 4px  #F06444;
+    border-left: solid 4px  #ec4b48;
     background-color: transparent;
     color:#ffffff;
 }
 .ant-menu-dark.ant-menu-inline .ant-menu-item-selected>a,.ant-menu-dark.ant-menu-inline .ant-menu-item-selected{
     color:#ffffff;
-    background-color: transparent;
+    background-color:  #251a3e;
+}
+.ant-menu-dark,.ant-menu-dark ul li,.ant-menu-dark ul{
+    background-color: #251a3e;
 }

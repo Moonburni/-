@@ -14,7 +14,8 @@ export default class Side extends React.Component{
     };
 
     componentDidMount =()=>{
-        if(window.location.hash.indexOf('bless') != -1 || window.location.hash.indexOf('super') != -1){
+        if(window.location.hash.indexOf('bless') != -1 || window.location.hash.indexOf('super') != -1
+            ||window.location.hash.indexOf('create') != -1){
             this.setState({
                 select:'2'
             })
@@ -36,7 +37,7 @@ export default class Side extends React.Component{
                         defaultSelectedKeys={['1']}
                   >
                       <SubMenu key="sub1" title={<span><Icon type="pay-circle-o" /><span>红包管理</span></span>}>
-                          <Menu.Item key="1"><Link to="/send">红包发送管理</Link></Menu.Item>
+                          <Menu.Item key="1"><Link to="/clock">红包发送管理</Link></Menu.Item>
                           <Menu.Item key="2"><Link to="/super">红包内容管理</Link></Menu.Item>
                       </SubMenu>
                   </Menu>
@@ -49,7 +50,7 @@ export default class Side extends React.Component{
                         defaultSelectedKeys={['2']}
                   >
                       <SubMenu key="sub1" title={<span><Icon type="pay-circle-o" /><span>红包管理</span></span>}>
-                          <Menu.Item key="1"><Link to="/send">红包发送管理</Link></Menu.Item>
+                          <Menu.Item key="1"><Link to="/clock">红包发送管理</Link></Menu.Item>
                           <Menu.Item key="2"><Link to="/super">红包内容管理</Link></Menu.Item>
                       </SubMenu>
                   </Menu>

@@ -1,26 +1,38 @@
 import React from 'react'
 import {Table,Modal,message} from 'antd'
 import {Link} from 'react-router'
-import {getSuperData,delSingleSuperData} from '../Server/Server'
+import {getHourData,delSingleSuperData} from '../Server/Server'
 
 
 const confirm = Modal.confirm;
 
-export default class SuperList extends React.Component {
+export default class ClockList extends React.Component {
 
     state = {
+        data:null,
         columns: [{
-            title: '奖品名称',
-            dataIndex: 'prizeName',
-            key: 'prizeName',
+            title: '时段',
+            dataIndex: 'timeSize',
+            key: 'timeSize',
+            render: (text, record) => (
+                <span>
+                    {record.startDayTime}~{record.endDayTime}&nbsp;&nbsp;
+                    {record.startHourTime}~{record.endHourTime}
+                </span>
+            ),
         }, {
-            title: '奖品描述',
-            dataIndex: 'description',
-            key: 'description',
+            title: '红包总数',
+            dataIndex: 'totalNum',
+            key: 'totalNum',
         }, {
-            title: '上限',
+            title: '中奖率',
             dataIndex: 'upperLimit',
             key: 'upperLimit',
+            render: (text, record) => (
+                <span>
+                    {record.superRpPoolSettings.num/record.totalNum}
+                </span>
+            ),
         }, {
             title: '操作',
             key: 'action',
@@ -37,9 +49,9 @@ export default class SuperList extends React.Component {
     };
 
     componentWillMount() {
-        getSuperData()
+        getHourData()
             .then(({jsonResult}) => {
-                // console.log(jsonResult.data);
+                console.log(jsonResult.data);
                 this.setState({
                     data: jsonResult.data
                 });
@@ -75,17 +87,29 @@ export default class SuperList extends React.Component {
 
     render = ()=> {
 
+        const bodyBuild =()=>{
+            if(this.state.data != null){
+                return(
+                    <div>
+                        <Link to="/create">
+                            <div className="btn">添加整点红包</div>
+                        </Link>
+                        <div style={{width: '920px', marginTop: '20px'}}>
+                            <Table rowKey={recode => recode.hourRpSettingId} dataSource={this.state.data} columns={this.state.columns}
+                                   bordered/>
+                        </div>
+                    </div>
+                )
+            }else{
+                return ''
+            }}
+        ;
 
         return (
             <div>
-                <Link to="/create">
-                    <div className="btn">添加红包</div>
-                </Link>
-                <div style={{width: '920px', marginTop: '20px'}}>
-                    <Table rowKey={recode => recode.superRpId} dataSource={this.state.data} columns={this.state.columns}
-                           bordered/>
-                </div>
+                {bodyBuild()}
             </div>
         )
     }
 }
+

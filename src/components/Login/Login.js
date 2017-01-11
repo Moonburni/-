@@ -1,7 +1,9 @@
 import React from 'react'
 import './login.css'
-import { Form, Icon, Input, Button } from 'antd';
-import {hashHistory} from "react-router";
+import { Form, Icon, Input, Button ,message} from 'antd'
+import {hashHistory} from "react-router"
+import {login} from '../Server/Server'
+import cookie from 'js-cookie'
 
 
 const FormItem = Form.Item;
@@ -12,8 +14,17 @@ export default class Login extends React.Component{
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
-                hashHistory.push('/send')
+                login(values).then(({jsonResult})=>{
+                    if(jsonResult.data){
+                        console.log(jsonResult);
+                        cookie.set('token',jsonResult.data.token);
+                        hashHistory.push('/send')
+                    }else{
+                        message.error('密码错误，或用户名不存在',3)
+                    }
+                }).catch((err)=>{
+                    message.error(err,3)
+                });
             }
         });
     };

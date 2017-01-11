@@ -6,7 +6,7 @@ import {getSingleSuperData, delSingleSuperData} from '../Server/Server'
 
 const confirm = Modal.confirm;
 
-export default class PagDetail extends React.Component {
+export default class ClockDetail extends React.Component {
 
     state = {
         data: null

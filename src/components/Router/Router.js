@@ -10,20 +10,28 @@ import PagDetail from '../Pag/PagDetail'
 import PagChange from '../Pag/PagChange'
 import SuperList from '../Pag/SuperList'
 import Create from '../Pag/Create'
+import Clock from '../Sender/Clock'
+import ClockList from '../Sender/ClockList'
+import cookie from 'js-cookie'
 
-// onEnter={(_ignore, replace)=> {
-//     if (!cookie.getJSON('token')) {
-//         replace(`/`);
-//     }
-// }}
+
 const Routes = () => {
     return (
         <Router history={hashHistory}>
             <Route path='/' component={Login}/>
-            <Route path="/app" component={App}>
+            <Route path="/app" component={App}
+                   onEnter={(_ignore, replace)=> {
+                       if (!cookie.getJSON('token')) {
+                           replace(`/`);
+                       }
+                   }}>
                 <IndexRoute  component={Send}/>
                 <Route path='/send' component={Send}>
-
+                    <IndexRoute component={Clock}/>
+                    <Route path='/clock' component={Clock}>
+                        <IndexRoute component={ClockList}/>
+                        <Route path='/clockList' component={ClockList}/>
+                    </Route>
                 </Route>
                 <Route path='/content' component={Content}>
                     <IndexRoute component={Super}/>
