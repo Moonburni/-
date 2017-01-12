@@ -1,8 +1,7 @@
 import React from 'react'
-import './pag-super.css'
 import {Link, hashHistory} from 'react-router'
 import {Modal, message} from 'antd'
-import {getSingleSuperData, delSingleSuperData} from '../Server/Server'
+import {getSingleClockData, delSingleHourData} from '../Server/Server'
 
 const confirm = Modal.confirm;
 
@@ -13,7 +12,7 @@ export default class ClockDetail extends React.Component {
     };
 
     componentWillMount() {
-        getSingleSuperData(this.props.params.id)
+        getSingleClockData(this.props.params.id)
             .then(({jsonResult}) => {
                 console.log(jsonResult.data);
                 this.setState({
@@ -31,8 +30,8 @@ export default class ClockDetail extends React.Component {
                 title: '是否删除此红包?',
                 content: '删除之后将无法恢复',
                 onOk() {
-                    delSingleSuperData(that.props.params.id).then(()=> {
-                        hashHistory.push('/superList')
+                    delSingleHourData(that.props.params.id).then(()=> {
+                        hashHistory.push('/clockList')
                     }).catch((err)=> {
                         message.error(err, 3)
                     })
@@ -42,40 +41,90 @@ export default class ClockDetail extends React.Component {
             });
         };
 
-        const bodyBuild =()=>{
-            if(this.state.data != null){
+        const blessBuild = ()=> {
+            if (this.state.data.blessRpPoolSettings.length > 0) {
+                return (
+                    <span>
+                        {this.state.data.blessRpPoolSettings.map((item, index)=> {
+                            return (
+                                <span key={index} style={{
+                                    display: 'inline-block',
+                                    width: '200px',
+                                    height: '35px',
+                                    backgroundColor: '#F06444',
+                                    color:'white',
+                                    textAlign:'center',
+                                    marginTop:'6px',
+                                    lineHeight:'35px',
+                                    marginLeft:'70px',
+                                    borderRadius:'5px'
+                                }}>
+                                    <p style={{float:'left',marginLeft:'25px',maxWidth:'120px',overflow:'hidden'}}>{item.blessRp.blessWord}</p>
+                                    <p style={{float:'right',marginRight:'25px'}}>{item.num}</p>
+                                </span>
+                            )
+                        })}
+                    </span>
+                )
+            } else {
+                return ''
+            }
+        };
+
+        const superBuild = ()=> {
+            if (this.state.data.superRpPoolSettings.length > 0) {
+                return (
+                    <span>
+                        {this.state.data.superRpPoolSettings.map((item, index)=> {
+                            return (
+                                <span key={index} style={{
+                                    display: 'inline-block',
+                                    width: '200px',
+                                    height: '35px',
+                                    backgroundColor: '#F06444',
+                                    color:'white',
+                                    textAlign:'center',
+                                    marginTop:'6px',
+                                    lineHeight:'35px',
+                                    marginLeft:'70px',
+                                    borderRadius:'5px'
+                                }}>
+                                    <p style={{float:'left',marginLeft:'25px',maxWidth:'120px',overflow:'hidden'}}>{item.superRp.prizeName}</p>
+                                    <p style={{float:'right',marginRight:'25px'}}>{item.num}</p>
+                                </span>
+                            )
+                        })}
+                    </span>
+                )
+            } else {
+                return ''
+            }
+        };
+
+        const bodyBuild = ()=> {
+            if (this.state.data != null) {
                 return (
                     <div className="pagDetail">
                         <p onClick={showConfirm}>删除</p>
                         <p><Link to={`/pagChange${this.props.params.id}`}>编辑</Link></p>
                         <div className="LaunchDetail">
                             <div className="textContent">
-                                <span>奖品示例图</span>
-                                <div style={{borderTop: 'solid 1px #F06444'}}>
-                                    <img style={{
-                                        margin:'auto',
-                                        marginTop:'10px',
-                                    }} src={`${this.state.data.coverImageUrl}?imageView2/1/w/300/h/160`}/>
+                                <span>选择日期</span>
+                                <div style={{height: '46px'}}>
+                                    {this.state.data.startDayTime}~{this.state.data.endDayTime}
                                 </div>
-                                <span>奖品名称</span>
-                                <div>{this.state.data.prizeName}</div>
-                                <span>奖品价值</span>
-                                <div>{this.state.data.price}</div>
-                                <span>赞助商</span>
-                                <div>{this.state.data.sponsor}</div>
-                                <span>奖品描述</span>
-                                <div>{this.state.data.description}</div>
-                                <span>奖品类型</span>
-                                <div>{this.state.data.prizeType}</div>
-                                <span>商品URL</span>
-                                <div>{this.state.data.goodsUrl}</div>
-                                <span>广告视频</span>
-                                <div>{this.state.data.adUrl}</div>
+                                <span>选择时段</span>
+                                <div> {this.state.data.startHourTime}~{this.state.data.endHourTime}</div>
+                                <span>中奖率</span>
+                                <div> {this.state.data.superRpPoolSettings.num / this.state.data.totalNum}</div>
+                                <span>奖池设计</span>
+                                <div style={{height:'auto'}}><span style={{position:'absolute'}}>超级红包:</span>{superBuild()}</div>
+                                <div style={{height:'auto'}}><span style={{position:'absolute'}}>祝福红包:</span>{blessBuild()}</div>
                             </div>
                         </div>
                     </div>
                 )
-            }else{
+            } else {
                 return ''
             }
         };

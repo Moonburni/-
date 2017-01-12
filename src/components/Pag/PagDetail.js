@@ -51,7 +51,7 @@ export default class PagDetail extends React.Component {
                         <div className="LaunchDetail">
                             <div className="textContent">
                                 <span>奖品示例图</span>
-                                <div style={{borderTop: 'solid 1px #F06444'}}>
+                                <div>
                                     <img style={{
                                         margin:'auto',
                                         marginTop:'10px',

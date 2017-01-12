@@ -12,6 +12,8 @@ import SuperList from '../Pag/SuperList'
 import Create from '../Pag/Create'
 import Clock from '../Sender/Clock'
 import ClockList from '../Sender/ClockList'
+import ClockDetail from '../Sender/ClockDetail'
+import ClockChange from '../Sender/ClockChange'
 import cookie from 'js-cookie'
 
 
@@ -31,6 +33,8 @@ const Routes = () => {
                     <Route path='/clock' component={Clock}>
                         <IndexRoute component={ClockList}/>
                         <Route path='/clockList' component={ClockList}/>
+                        <Route path='/clockDetail:id' component={ClockDetail}/>
+                        <Route path='/clockChange:id' component={ClockChange}/>
                     </Route>
                 </Route>
                 <Route path='/content' component={Content}>

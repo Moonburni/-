@@ -1,14 +1,13 @@
 .textContent{
     margin-left: 0;
     margin-top: 30px;
-    width: 560px;
+    width: 800px;
     clear: both;
 }
 .textContent>div{
-    width: 428px;
+    width: 800px;
     height: 46px;
     margin-left: 132px;
-    border:solid 1px #F06444;
     border-radius: 0;
     border-top: transparent;
     line-height: 46px;

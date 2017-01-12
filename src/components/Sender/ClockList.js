@@ -1,7 +1,7 @@
 import React from 'react'
 import {Table,Modal,message} from 'antd'
 import {Link} from 'react-router'
-import {getHourData,delSingleSuperData} from '../Server/Server'
+import {getHourData,delSingleHourData} from '../Server/Server'
 
 
 const confirm = Modal.confirm;
@@ -39,9 +39,9 @@ export default class ClockList extends React.Component {
             key: 'action',
             render: (text, record) => (
                 <span>
-                   <Link to={`/pagDetail${record.hourRpSettingId}`}>查看</Link>
+                   <Link to={`/clockDetail${record.hourRpSettingId}`}>查看</Link>
                    <span className="ant-divider"/>
-                   <Link to={`/pagChange${record.hourRpSettingId}`}>编辑</Link>
+                   <Link to={`/clockChange${record.hourRpSettingId}`}>编辑</Link>
                    <span className="ant-divider"/>
                    <a onClick={this.showConfirm(record.hourRpSettingId)}>删除</a>
                 </span>
@@ -68,8 +68,8 @@ export default class ClockList extends React.Component {
                     title: '是否删除此红包?',
                     content: '删除之后将无法恢复',
                     onOk() {
-                        delSingleSuperData(id).then(()=> {
-                            getSuperData()
+                        delSingleHourData(id).then(()=> {
+                            getHourData()
                                 .then(({jsonResult}) => {
                                     // console.log(jsonResult.data);
                                     that.setState({

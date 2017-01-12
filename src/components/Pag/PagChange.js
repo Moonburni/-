@@ -1,5 +1,5 @@
 import React from 'react'
-import {Icon, Input, Upload, Select} from 'antd'
+import {Icon, Input, Upload, Select,message} from 'antd'
 import {Link, hashHistory} from 'react-router'
 import './pag-super.css'
 import {getSingleSuperData, putSingleSuperData,getQiNiuToken} from '../Server/Server'
@@ -77,7 +77,7 @@ export default class PagChange extends React.Component {
 
         const headersBuilder = (file)=> {
             return ({
-                // token: cookie.get('qiNiuToken'),
+                token: this.state.QNToken,
                 key: 'coverImage/' + file.name
             });
         };
@@ -131,7 +131,7 @@ export default class PagChange extends React.Component {
                                     className="avatar-uploader"
                                     name="file"
                                     showUploadList={false}
-                                    action=''
+                                    action={qiNiu}
                                     beforeUpload={this.beforeUpload}
                                     onChange={this.handleChange}
                                     data={headersBuilder}

@@ -3,6 +3,7 @@ import {Table, Input, Icon, Button, Popconfirm, message,Upload} from 'antd'
 import {Link} from 'react-router'
 import {getBlessData, delSingleBlessData, postBlessData, putBlessData,getQiNiuToken} from '../Server/Server'
 import {qiNiu,qiNiuDomain} from '../../../config'
+import cookie from 'js-cookie';
 
 class EditableCell extends React.Component {
     state = {
@@ -24,35 +25,26 @@ class EditableCell extends React.Component {
         this.setState({editable: true});
     };
 
-    handleChangeOther =()=>{
+    handleChangeOther =(info)=>{
         if (info.file.status === 'done') {
             this.setState({
-                coverImageUrl: qiNiuDomain + '/' + info.file.response.key,
+                value: qiNiuDomain + '/' + info.file.response.key,
             })
         } else if (info.file.status === 'error') {
             message.error('该文件名已存在，请重命名文件', 3)
         }
     };
 
-    componentWillMount() {
-        getQiNiuToken()
-            .then(({jsonResult}) => {
-                // console.log(jsonResult);
-                this.setState({
-                    QNToken: jsonResult.data.QNToken
-                });
-            });
+
+    headersBuilder = (file)=> {
+        return ({
+            token: cookie.get('QNToken'),
+            key: 'coverImage/' + file.name
+        });
     };
 
     render() {
         const {value, editable} = this.state;
-        const headersBuilder = (file)=> {
-            return ({
-                token: this.state.QNToken,
-                key: 'coverImage/' + file.name
-            });
-        };
-
         // console.log(value.type);
         if(value.indexOf('http') != -1){
             return (<div className="editable-cell">
@@ -60,12 +52,12 @@ class EditableCell extends React.Component {
                     editable ?
                         <div className="editable-cell-input-wrapper">
                             <Upload
-                                name="avatar"
+                                name="file"
                                 showUploadList={false}
                                 action={qiNiu}
                                 onChange={this.handleChangeOther}
                                 style={{width:'200px',height:'125px'}}
-                                data={headersBuilder}
+                                data={this.headersBuilder}
                             >{
                                 value ?
                                     <img src={value} style={{width:'200px',height:'125px',cursor:'pointer'}} alt="" className="avatar" /> :
@@ -125,12 +117,17 @@ export class EditableTable extends React.Component {
     componentDidMount() {
         getBlessData()
             .then(({jsonResult}) => {
-                // console.log(jsonResult.data);
+                console.log(jsonResult.data);
                 this.setState({
                     dataSource: jsonResult.data,
                     count: jsonResult.data.length,
                     loading:false
                 });
+            });
+        getQiNiuToken()
+            .then(({jsonResult}) => {
+                // console.log(jsonResult.data.QNToken);
+                cookie.set('QNToken',jsonResult.data.QNToken);
             });
     }
 
@@ -139,12 +136,12 @@ export class EditableTable extends React.Component {
         this.columns = [
             {
                 title: '',
-                dataIndex: 'blessImg',
+                dataIndex: 'imageUrl',
                 width: '20%',
                 render: (text, record, index) => (
                     <EditableCell
-                        value={'http://4493bz.1985t.com/uploads/allimg/150127/4-15012G52133.jpg'}
-                        onChange={this.onCellChangeOther(index, 'blessImg')}
+                        value={text}
+                        onChange={this.onCellChangeOther(index, 'imageUrl')}
                     />
                 ),
             }, {
@@ -181,7 +178,8 @@ export class EditableTable extends React.Component {
 
     onCellChangeOther = (index, key) => {
         return (value) => {
-            let data = {blessWord: value};
+            console.log(value);
+            let data = {imageUrl: value};
             putBlessData(this.state.dataSource[index].blessRpId, data).then(
                 ()=> {
                     const dataSource = [...this.state.dataSource];
@@ -195,6 +193,7 @@ export class EditableTable extends React.Component {
     onCellChange = (index, key) => {
         return (value) => {
             let data = {blessWord: value};
+            console.log(value);
             putBlessData(this.state.dataSource[index].blessRpId, data).then(
                 ()=> {
                     const dataSource = [...this.state.dataSource];

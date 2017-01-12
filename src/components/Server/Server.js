@@ -57,12 +57,26 @@ export async function getSingleSuperData(data) {
     return xFetch(`/api/superRp/${data}`);
 }
 
+export async function getSingleClockData(data) {
+    return xFetch(`/api/hourRpSetting/${data}`);
+}
+
+
 export async function putSingleSuperData(id,data) {
     return xFetch(
         `/api/superRp/${id}`,
         {
             method: 'PUT',
             body: JSON.stringify(data)
+        },
+    );
+}
+
+export async function delSingleHourData(id) {
+    return xFetch(
+        `/api/hourRpSetting/${id}`,
+        {
+            method: 'DELETE'
         },
     );
 }
