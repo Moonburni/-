@@ -18,7 +18,7 @@ export default class Login extends React.Component{
                     if(jsonResult.data){
                         console.log(jsonResult);
                         cookie.set('token',jsonResult.data.token);
-                        hashHistory.push('/send')
+                        hashHistory.push('/clock')
                     }else{
                         message.error('密码错误，或用户名不存在',3)
                     }

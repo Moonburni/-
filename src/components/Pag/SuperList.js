@@ -9,6 +9,7 @@ const confirm = Modal.confirm;
 export default class SuperList extends React.Component {
 
     state = {
+        loading:true,
         columns: [{
             title: '奖品名称',
             dataIndex: 'prizeName',
@@ -41,7 +42,8 @@ export default class SuperList extends React.Component {
             .then(({jsonResult}) => {
                 // console.log(jsonResult.data);
                 this.setState({
-                    data: jsonResult.data
+                    data: jsonResult.data,
+                    loading:false
                 });
             });
     }
@@ -83,7 +85,7 @@ export default class SuperList extends React.Component {
                 </Link>
                 <div style={{width: '920px', marginTop: '20px'}}>
                     <Table rowKey={recode => recode.superRpId} dataSource={this.state.data} columns={this.state.columns}
-                           bordered/>
+                           bordered loading={this.state.loading}/>
                 </div>
             </div>
         )

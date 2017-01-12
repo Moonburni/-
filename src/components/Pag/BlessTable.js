@@ -1,7 +1,7 @@
 import React from 'react'
 import {Table, Input, Icon, Button, Popconfirm, message,Upload} from 'antd'
 import {Link} from 'react-router'
-import {getBlessData, delSingleBlessData, postBlessData, putBlessData} from '../Server/Server'
+import {getBlessData, delSingleBlessData, postBlessData, putBlessData,getQiNiuToken} from '../Server/Server'
 import {qiNiu,qiNiuDomain} from '../../../config'
 
 class EditableCell extends React.Component {
@@ -53,7 +53,7 @@ class EditableCell extends React.Component {
             });
         };
 
-        console.log(value.type);
+        // console.log(value.type);
         if(value.indexOf('http') != -1){
             return (<div className="editable-cell">
                 {
@@ -68,7 +68,7 @@ class EditableCell extends React.Component {
                                 data={headersBuilder}
                             >{
                                 value ?
-                                    <img src={value} style={{width:'200px',height:'125px'}} alt="" className="avatar" /> :
+                                    <img src={value} style={{width:'200px',height:'125px',cursor:'pointer'}} alt="" className="avatar" /> :
                                     <Icon type="plus" className="avatar-uploader-trigger" />
                             }
                             </Upload>
@@ -128,7 +128,8 @@ export class EditableTable extends React.Component {
                 // console.log(jsonResult.data);
                 this.setState({
                     dataSource: jsonResult.data,
-                    count: jsonResult.data.length
+                    count: jsonResult.data.length,
+                    loading:false
                 });
             });
     }
@@ -174,6 +175,7 @@ export class EditableTable extends React.Component {
         this.state = {
             dataSource: [],
             count: 0,
+            loading:true
         };
     }
 
@@ -235,7 +237,7 @@ export class EditableTable extends React.Component {
         return (<div>
             <div className="btn" style={{marginBottom: '20px'}} onClick={this.handleAdd}>添加红包</div>
             <Table bordered rowKey={recode => recode.blessRpId} dataSource={dataSource} columns={columns}
-                   style={{width: '920px'}}/>
+                   style={{width: '920px'}} loading={this.state.loading}/>
         </div>);
     }
 }

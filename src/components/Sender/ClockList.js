@@ -9,6 +9,7 @@ const confirm = Modal.confirm;
 export default class ClockList extends React.Component {
 
     state = {
+        loading:true,
         data:null,
         columns: [{
             title: '时段',
@@ -38,11 +39,11 @@ export default class ClockList extends React.Component {
             key: 'action',
             render: (text, record) => (
                 <span>
-                   <Link to={`/pagDetail${record.superRpId}`}>查看</Link>
+                   <Link to={`/pagDetail${record.hourRpSettingId}`}>查看</Link>
                    <span className="ant-divider"/>
-                   <Link to={`/pagChange${record.superRpId}`}>编辑</Link>
+                   <Link to={`/pagChange${record.hourRpSettingId}`}>编辑</Link>
                    <span className="ant-divider"/>
-                   <a onClick={this.showConfirm(record.superRpId)}>删除</a>
+                   <a onClick={this.showConfirm(record.hourRpSettingId)}>删除</a>
                 </span>
             ),
         }]
@@ -53,7 +54,8 @@ export default class ClockList extends React.Component {
             .then(({jsonResult}) => {
                 console.log(jsonResult.data);
                 this.setState({
-                    data: jsonResult.data
+                    data: jsonResult.data,
+                    loading:false
                 });
             });
     }
@@ -87,27 +89,15 @@ export default class ClockList extends React.Component {
 
     render = ()=> {
 
-        const bodyBuild =()=>{
-            if(this.state.data != null){
-                return(
-                    <div>
-                        <Link to="/create">
-                            <div className="btn">添加整点红包</div>
-                        </Link>
-                        <div style={{width: '920px', marginTop: '20px'}}>
-                            <Table rowKey={recode => recode.hourRpSettingId} dataSource={this.state.data} columns={this.state.columns}
-                                   bordered/>
-                        </div>
-                    </div>
-                )
-            }else{
-                return ''
-            }}
-        ;
-
         return (
             <div>
-                {bodyBuild()}
+                <Link to="/create">
+                    <div className="btn">添加整点红包</div>
+                </Link>
+                <div style={{width: '920px', marginTop: '20px'}}>
+                    <Table rowKey={recode => recode.hourRpSettingId} dataSource={this.state.data} columns={this.state.columns}
+                           bordered loading={this.state.loading}/>
+                </div>
             </div>
         )
     }
