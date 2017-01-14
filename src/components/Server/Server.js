@@ -33,6 +33,16 @@ export async function postSuperData(data) {
     );
 }
 
+export async function postHourData(data) {
+    return xFetch(
+        '/api/hourRpSetting',
+        {
+            method: 'POST',
+            body: JSON.stringify(data)
+        },
+    );
+}
+
 export async function postBlessData(data) {
     return xFetch(
         '/api/blessRp',
@@ -65,6 +75,16 @@ export async function getSingleClockData(data) {
 export async function putSingleSuperData(id,data) {
     return xFetch(
         `/api/superRp/${id}`,
+        {
+            method: 'PUT',
+            body: JSON.stringify(data)
+        },
+    );
+}
+
+export async function putSingleHourData(id,data) {
+    return xFetch(
+        `/api/hourRpSetting/${id}`,
         {
             method: 'PUT',
             body: JSON.stringify(data)

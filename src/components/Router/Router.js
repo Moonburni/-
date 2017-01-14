@@ -14,6 +14,7 @@ import Clock from '../Sender/Clock'
 import ClockList from '../Sender/ClockList'
 import ClockDetail from '../Sender/ClockDetail'
 import ClockChange from '../Sender/ClockChange'
+import CreateClock from '../Sender/CreateClock'
 import cookie from 'js-cookie'
 
 
@@ -33,6 +34,7 @@ const Routes = () => {
                     <Route path='/clock' component={Clock}>
                         <IndexRoute component={ClockList}/>
                         <Route path='/clockList' component={ClockList}/>
+                        <Route path='/createClock' component={CreateClock}/>
                         <Route path='/clockDetail:id' component={ClockDetail}/>
                         <Route path='/clockChange:id' component={ClockChange}/>
                     </Route>

@@ -18,22 +18,13 @@ export default class ClockList extends React.Component {
             render: (text, record) => (
                 <span>
                     {record.startDayTime}~{record.endDayTime}&nbsp;&nbsp;
-                    {record.startHourTime}~{record.endHourTime}
+                    {record.startHourTime}:00:00~{record.endHourTime}:00:00
                 </span>
             ),
         }, {
             title: '红包总数',
             dataIndex: 'totalNum',
             key: 'totalNum',
-        }, {
-            title: '中奖率',
-            dataIndex: 'upperLimit',
-            key: 'upperLimit',
-            render: (text, record) => (
-                <span>
-                    {record.superRpPoolSettings.num/record.totalNum}
-                </span>
-            ),
         }, {
             title: '操作',
             key: 'action',
@@ -52,7 +43,7 @@ export default class ClockList extends React.Component {
     componentWillMount() {
         getHourData()
             .then(({jsonResult}) => {
-                console.log(jsonResult.data);
+                // console.log(jsonResult.data);
                 this.setState({
                     data: jsonResult.data,
                     loading:false
@@ -91,7 +82,7 @@ export default class ClockList extends React.Component {
 
         return (
             <div>
-                <Link to="/create">
+                <Link to="/createClock">
                     <div className="btn">添加整点红包</div>
                 </Link>
                 <div style={{width: '920px', marginTop: '20px'}}>

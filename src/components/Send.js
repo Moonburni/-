@@ -8,7 +8,7 @@ export default class Send extends React.Component{
         return (
             <div className="content">
                 <ul>
-                    <li><Link to='/send' activeStyle={{color:'#F06444',borderBottom:'solid 4px #F06444'}}>整点红包</Link></li>
+                    <li><Link to='/clock' activeStyle={{color:'#F06444',borderBottom:'solid 4px #F06444'}}>整点红包</Link></li>
                 </ul>
                 <div style={{marginTop:'20px',marginLeft:'40px'}}>
                     {this.props.children}

@@ -67,7 +67,20 @@ export default class ClockDetail extends React.Component {
                     </span>
                 )
             } else {
-                return ''
+                return  <span style={{
+                    display: 'inline-block',
+                    width: '200px',
+                    height: '35px',
+                    backgroundColor: '#F06444',
+                    color:'white',
+                    textAlign:'center',
+                    marginTop:'6px',
+                    lineHeight:'35px',
+                    marginLeft:'70px',
+                    borderRadius:'5px'
+                }}>
+                                   暂无
+                                </span>
             }
         };
 
@@ -97,7 +110,20 @@ export default class ClockDetail extends React.Component {
                     </span>
                 )
             } else {
-                return ''
+                return <span style={{
+                    display: 'inline-block',
+                    width: '200px',
+                    height: '35px',
+                    backgroundColor: '#F06444',
+                    color:'white',
+                    textAlign:'center',
+                    marginTop:'6px',
+                    lineHeight:'35px',
+                    marginLeft:'70px',
+                    borderRadius:'5px'
+                }}>
+                                   暂无
+                                </span>
             }
         };
 
@@ -106,7 +132,7 @@ export default class ClockDetail extends React.Component {
                 return (
                     <div className="pagDetail">
                         <p onClick={showConfirm}>删除</p>
-                        <p><Link to={`/pagChange${this.props.params.id}`}>编辑</Link></p>
+                        <p><Link to={`/clockChange${this.props.params.id}`}>编辑</Link></p>
                         <div className="LaunchDetail">
                             <div className="textContent">
                                 <span>选择日期</span>
@@ -114,9 +140,7 @@ export default class ClockDetail extends React.Component {
                                     {this.state.data.startDayTime}~{this.state.data.endDayTime}
                                 </div>
                                 <span>选择时段</span>
-                                <div> {this.state.data.startHourTime}~{this.state.data.endHourTime}</div>
-                                <span>中奖率</span>
-                                <div> {this.state.data.superRpPoolSettings.num / this.state.data.totalNum}</div>
+                                <div> {this.state.data.startHourTime}:00:00~{this.state.data.endHourTime}:00:00</div>
                                 <span>奖池设计</span>
                                 <div style={{height:'auto'}}><span style={{position:'absolute'}}>超级红包:</span>{superBuild()}</div>
                                 <div style={{height:'auto'}}><span style={{position:'absolute'}}>祝福红包:</span>{blessBuild()}</div>

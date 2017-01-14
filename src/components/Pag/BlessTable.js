@@ -68,7 +68,7 @@ class EditableCell extends React.Component {
                                 type="check"
                                 className="editable-cell-icon-check"
                                 onClick={this.check}
-                            />请点击图片修改
+                            />请点击图片修改,修改完毕后请点勾保存
                         </div>
                         :
                         <div className="editable-cell-text-wrapper">
@@ -135,26 +135,28 @@ export class EditableTable extends React.Component {
         super(props);
         this.columns = [
             {
-                title: '',
+                title: '祝福卡片',
                 dataIndex: 'imageUrl',
-                width: '20%',
+                width: '80%',
                 render: (text, record, index) => (
                     <EditableCell
                         value={text}
                         onChange={this.onCellChangeOther(index, 'imageUrl')}
                     />
                 ),
-            }, {
-                title: '祝福语',
-                dataIndex: 'blessWord',
-                width: '60%',
-                render: (text, record, index) => (
-                    <EditableCell
-                        value={text}
-                        onChange={this.onCellChange(index, 'blessWord')}
-                    />
-                ),
-            }, {
+            },
+            // {
+            //     title: '祝福语',
+            //     dataIndex: 'blessWord',
+            //     width: '60%',
+            //     render: (text, record, index) => (
+            //         <EditableCell
+            //             value={text}
+            //             onChange={this.onCellChange(index, 'blessWord')}
+            //         />
+            //     ),
+            // },
+            {
                 title: '操作',
                 dataIndex: 'operation',
                 render: (text, record, index) => {
@@ -219,6 +221,7 @@ export class EditableTable extends React.Component {
         const {count, dataSource} = this.state;
         const newData = {
             blessWord: `请输入祝福语`,
+            imageUrl:'http'
         };
         postBlessData(newData).then(
             ({jsonResult})=> {

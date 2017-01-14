@@ -1,7 +1,7 @@
 import React from 'react'
 import {Link, hashHistory} from 'react-router'
 import {Modal, message, DatePicker, Select, Icon, Button, Table, Input} from 'antd'
-import {getSuperData, getBlessData, getSingleClockData,putSingleHourData} from '../Server/Server'
+import {getSuperData, getBlessData, postHourData} from '../Server/Server'
 import moment from 'moment'
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
@@ -10,7 +10,7 @@ const Option = Select.Option;
 const confirm = Modal.confirm;
 const {RangePicker} = DatePicker;
 
-export default class ClockChange extends React.Component {
+export default class CreateClock extends React.Component {
 
     state = {
         data: [],
@@ -27,7 +27,6 @@ export default class ClockChange extends React.Component {
         loadingOther: false,
         visibleOther: false,
         selectedRowKeysOther: [],
-        bodyBuild:false
     };
 
     showModal = ()=> {
@@ -102,19 +101,6 @@ export default class ClockChange extends React.Component {
                     dataOther: jsonResult.data,
                 });
             });
-        getSingleClockData(this.props.params.id).then(({jsonResult})=> {
-            console.log(jsonResult.data);
-            this.setState({
-                blessRpPoolSettings: jsonResult.data.blessRpPoolSettings,
-                superRpPoolSettings: jsonResult.data.superRpPoolSettings,
-                endDayTime: jsonResult.data.endDayTime,
-                endHourTime:jsonResult.data.endHourTime,
-                startDayTime:jsonResult.data.startDayTime,
-                startHourTime: jsonResult.data.startHourTime,
-                bodyBuild:true
-            });
-        });
-
     }
 
 
@@ -130,6 +116,23 @@ export default class ClockChange extends React.Component {
 
 
     render = ()=> {
+
+        const showConfirm = ()=> {
+            let that = this;
+            confirm({
+                title: '是否删除此红包?',
+                content: '删除之后将无法恢复',
+                onOk() {
+                    delSingleHourData(that.props.params.id).then(()=> {
+                        hashHistory.push('/clockList')
+                    }).catch((err)=> {
+                        message.error(err, 3)
+                    })
+                },
+                onCancel() {
+                },
+            });
+        };
 
         const submit = ()=> {
             let num = 0;
@@ -148,8 +151,8 @@ export default class ClockChange extends React.Component {
                 blessRpPoolSettings: this.state.blessRpPoolSettings,
                 totalNum: num
             };
-            console.log(data);
-            putSingleHourData(this.props.params.id,data).then(()=> {
+            // console.log(data);
+            postHourData(data).then(()=> {
                 message.success('保存成功',3);
                 hashHistory.push('/clockLIst')
             }).catch((error)=> {
@@ -327,26 +330,23 @@ export default class ClockChange extends React.Component {
             selectedRowKeysOther,
             onChange: this.onSelectChangeOther,
         };
-
-        const bodyBuild =()=>{
-            if(this.state.bodyBuild === true){
-                return (
-                    <div className="pagDetail">
-                        <p><Link to='/clockList'>放弃</Link></p>
-                        <p onClick={submit}>保存</p>
-                        <div className="LaunchDetail">
-                            <div className="textContent">
-                                <span>选择日期</span>
-                                <div style={{height: '46px'}}>
-                                    <RangePicker
-                                        defaultValue={[moment(this.state.startDayTime, dateFormat), moment(this.state.endDayTime, dateFormat)]}
-                                        format={dateFormat} showToday onChange={dataChange}
-                                    />
-                                </div>
-                                <span>选择时段</span>
-                                <div>
+        return (
+            <div className="pagDetail">
+                <p><Link to='/clockList'>放弃</Link></p>
+                <p onClick={submit}>保存</p>
+                <div className="LaunchDetail">
+                    <div className="textContent">
+                        <span>选择日期</span>
+                        <div style={{height: '46px'}}>
+                            <RangePicker
+                                placeholder={['开始日期', '结束日期']}
+                                format={dateFormat} showToday onChange={dataChange}
+                            />
+                        </div>
+                        <span>选择时段</span>
+                        <div>
                             <span style={style}>
-                              <Select defaultValue={this.state.startHourTime} style={{width: 155}} onChange={handleChange}>
+                              <Select placeholder="开始时段" style={{width: 155}} onChange={handleChange}>
                                 <Option value="00">00:00:00</Option>
                                 <Option value="01">01:00:00</Option>
                                 <Option value="02">02:00:00</Option>
@@ -373,8 +373,8 @@ export default class ClockChange extends React.Component {
                                 <Option value="23">23:00:00</Option>
                               </Select>
                         </span>~
-                                    <span style={style}>
-                                <Select defaultValue={this.state.endHourTime} style={{width: 155}} onChange={handleChangeOther}>
+                            <span style={style}>
+                                <Select placeholder="结束时段" style={{width: 155}} onChange={handleChangeOther}>
                                 <Option value="00">00:00:00</Option>
                                 <Option value="01">01:00:00</Option>
                                 <Option value="02">02:00:00</Option>
@@ -401,88 +401,79 @@ export default class ClockChange extends React.Component {
                                 <Option value="23">23:00:00</Option>
                               </Select>
                             </span></div>
-                                <span>奖池设计</span>
-                                <div style={{height: 'auto'}}>
+                        <span>奖池设计</span>
+                        <div style={{height: 'auto'}}>
                             <span style={{position: 'absolute'}}>
                                 超级红包:
                             </span>
-                                    {superBuild()}<Icon
-                                    style={{
-                                        fontSize: '28px',
-                                        color: '#F06444',
-                                        marginTop: '10px',
-                                        position: 'absolute',
-                                        marginLeft: '5px'
-                                    }}
-                                    onClick={this.showModal}
-                                    type="plus"/>
-                                </div>
-                                <div style={{height: 'auto'}}>
+                            {superBuild()}<Icon
+                            style={{
+                                fontSize: '28px',
+                                color: '#F06444',
+                                marginTop: '10px',
+                                position: 'absolute',
+                                marginLeft: '5px'
+                            }}
+                            onClick={this.showModal}
+                            type="plus"/>
+                        </div>
+                        <div style={{height: 'auto'}}>
                             <span style={{position: 'absolute'}}>
                                 祝福红包:
                             </span>
-                                    {blessBuild()}<Icon
-                                    style={{
-                                        fontSize: '28px',
-                                        color: '#F06444',
-                                        marginTop: '10px',
-                                        position: 'absolute',
-                                        marginLeft: '5px'
-                                    }}
-                                    onClick={this.showModalOther}
-                                    type="plus"/>
-                                </div>
-                            </div>
+                            {blessBuild()}<Icon
+                            style={{
+                                fontSize: '28px',
+                                color: '#F06444',
+                                marginTop: '10px',
+                                position: 'absolute',
+                                marginLeft: '5px'
+                            }}
+                            onClick={this.showModalOther}
+                            type="plus"/>
                         </div>
-                        <Modal
-                            visible={this.state.visible}
-                            title="添加超级红包"
-                            onOk={this.handleOk}
-                            onCancel={this.handleCancel}
-                            footer={[
-                                <Button key="back" type="ghost" size="large" onClick={this.handleCancel}>放弃</Button>,
-                                <Button style={{backgroundColor: '#F06444', borderColor: '#F06444'}} key="submit" type="primary"
-                                        size="large" loading={this.state.loading} onClick={this.handleOk}>
-                                    保存
-                                </Button>,
-                            ]}
-                        >
-                            <div>
-
-                                <Table rowKey={recode => recode.superRpId} rowSelection={rowSelection} columns={columns}
-                                       dataSource={this.state.data}/>
-                            </div>
-                        </Modal>
-                        <Modal
-                            visible={this.state.visibleOther}
-                            title="添加超级红包"
-                            onOk={this.handleOkOther}
-                            onCancel={this.handleCancelOther}
-                            footer={[
-                                <Button key="back" type="ghost" size="large" onClick={this.handleCancelOther}>放弃</Button>,
-                                <Button style={{backgroundColor: '#F06444', borderColor: '#F06444'}} key="submit" type="primary"
-                                        size="large" loading={this.state.loadingOther} onClick={this.handleOkOther}>
-                                    保存
-                                </Button>,
-                            ]}
-                        >
-                            <div>
-
-                                <Table rowKey={recode => recode.blessRpId} rowSelection={rowSelectionOther}
-                                       columns={columnsOther}
-                                       dataSource={this.state.dataOther}/>
-                            </div>
-                        </Modal>
                     </div>
-                )
-            }else{
-                return ''
-            }
-        };
-        return (
-           <div>
-               {bodyBuild()}
-           </div>
+                </div>
+                <Modal
+                    visible={this.state.visible}
+                    title="添加超级红包"
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                    footer={[
+                        <Button key="back" type="ghost" size="large" onClick={this.handleCancel}>放弃</Button>,
+                        <Button style={{backgroundColor: '#F06444', borderColor: '#F06444'}} key="submit" type="primary"
+                                size="large" loading={this.state.loading} onClick={this.handleOk}>
+                            保存
+                        </Button>,
+                    ]}
+                >
+                    <div>
+
+                        <Table rowKey={recode => recode.superRpId} rowSelection={rowSelection} columns={columns}
+                               dataSource={this.state.data}/>
+                    </div>
+                </Modal>
+                <Modal
+                    visible={this.state.visibleOther}
+                    title="添加超级红包"
+                    onOk={this.handleOkOther}
+                    onCancel={this.handleCancelOther}
+                    footer={[
+                        <Button key="back" type="ghost" size="large" onClick={this.handleCancelOther}>放弃</Button>,
+                        <Button style={{backgroundColor: '#F06444', borderColor: '#F06444'}} key="submit" type="primary"
+                                size="large" loading={this.state.loadingOther} onClick={this.handleOkOther}>
+                            保存
+                        </Button>,
+                    ]}
+                >
+                    <div>
+
+                        <Table rowKey={recode => recode.blessRpId} rowSelection={rowSelectionOther}
+                               columns={columnsOther}
+                               dataSource={this.state.dataOther}/>
+                    </div>
+                </Modal>
+            </div>
         )
     }
 }
