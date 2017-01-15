@@ -65,6 +65,7 @@ class EditableCell extends React.Component {
                             }
                             </Upload>
                             <Icon
+                                style={{fontSize:'28px'}}
                                 type="check"
                                 className="editable-cell-icon-check"
                                 onClick={this.check}
@@ -74,6 +75,7 @@ class EditableCell extends React.Component {
                         <div className="editable-cell-text-wrapper">
                             <img style={{width:'200px'}} src={value}/>
                             <Icon
+                                style={{fontSize:'28px'}}
                                 type="edit"
                                 className="editable-cell-icon"
                                 onClick={this.edit}
@@ -92,6 +94,7 @@ class EditableCell extends React.Component {
                                 onPressEnter={this.check}
                             />
                             <Icon
+                                style={{fontSize:'28px'}}
                                 type="check"
                                 className="editable-cell-icon-check"
                                 onClick={this.check}
@@ -101,6 +104,7 @@ class EditableCell extends React.Component {
                         <div className="editable-cell-text-wrapper">
                             {value || ' '}
                             <Icon
+                                style={{fontSize:'28px'}}
                                 type="edit"
                                 className="editable-cell-icon"
                                 onClick={this.edit}
@@ -137,7 +141,7 @@ export class EditableTable extends React.Component {
             {
                 title: '祝福卡片',
                 dataIndex: 'imageUrl',
-                width: '80%',
+                width: '20%',
                 render: (text, record, index) => (
                     <EditableCell
                         value={text}
@@ -145,17 +149,17 @@ export class EditableTable extends React.Component {
                     />
                 ),
             },
-            // {
-            //     title: '祝福语',
-            //     dataIndex: 'blessWord',
-            //     width: '60%',
-            //     render: (text, record, index) => (
-            //         <EditableCell
-            //             value={text}
-            //             onChange={this.onCellChange(index, 'blessWord')}
-            //         />
-            //     ),
-            // },
+            {
+                title: '祝福语',
+                dataIndex: 'blessWord',
+                width: '60%',
+                render: (text, record, index) => (
+                    <EditableCell
+                        value={text}
+                        onChange={this.onCellChange(index, 'blessWord')}
+                    />
+                ),
+            },
             {
                 title: '操作',
                 dataIndex: 'operation',
@@ -221,12 +225,12 @@ export class EditableTable extends React.Component {
         const {count, dataSource} = this.state;
         const newData = {
             blessWord: `请输入祝福语`,
-            imageUrl:'http'
+            imageUrl:'http://ojlisse1z.bkt.clouddn.com/coverImage/init.png'
         };
         postBlessData(newData).then(
             ({jsonResult})=> {
                 this.setState({
-                    dataSource: [...dataSource, jsonResult.data],
+                    dataSource: [ jsonResult.data,...dataSource],
                     count: count + 1,
                 });
             }
