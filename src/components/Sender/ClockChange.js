@@ -292,12 +292,12 @@ export default class ClockChange extends React.Component {
             dataIndex: 'prizeName',
         }, {
             title: '上限剩余',
-            dataIndex: 'upperLimit',
+            dataIndex: 'remain',
         }, {
             title: '输入数量',
             key: 'action',
             render: (text, record) => (
-                <Input placeholder={`请输入数量小于${record.upperLimit}`} id={record.superRpId}/>
+                <Input placeholder={`请输入数量小于${record.remain}`} id={record.superRpId}/>
             ),
         }];
 

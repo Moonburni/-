@@ -37,10 +37,10 @@ export default class Login extends React.Component{
             fontSize:'18px',
             color:'#333333',
             backgroundColor:'white',
-            paddingLeft:'24px'
+            paddingLeft:'10px',
         };
         const btn = {
-            width:'319px',
+            width:'250px',
             height:'50px',
             fontSize:'18px',
             color:'#ffffff',
@@ -53,22 +53,22 @@ export default class Login extends React.Component{
             fontSize:'24px'
         };
         return (
-            <div>
-               <header>赢面AR红包管理后台</header>
+            <div className="login-body">
+               <header/>
                 <div className="login-main">
                     <Form onSubmit={this.handleSubmit} className="login-form">
                         <FormItem>
                             {getFieldDecorator('adminName', {
                                 rules: [{ required: true, message: '请输入用户名!' }],
                             })(
-                                <Input style={style} addonBefore={<Icon type="user" style={icon}/>} placeholder="请输入用户名" />
+                                <Input style={style} placeholder="请输入用户名" />
                             )}
                         </FormItem>
                         <FormItem>
                             {getFieldDecorator('password', {
                                 rules: [{ required: true, message: '请输入密码!' }],
                             })(
-                                <Input style={style} addonBefore={<Icon type="lock" style={icon}/>} type="password" placeholder="请输入密码" />
+                                <Input style={style}  type="password" placeholder="请输入密码" />
                             )}
                         </FormItem>
                         <FormItem>

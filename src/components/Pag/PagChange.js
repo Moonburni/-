@@ -153,10 +153,10 @@ export default class PagChange extends React.Component {
                             <p>赞助商</p>
                             <Input defaultValue={this.state.data.sponsor} id="sponsor"/>
                             <p>奖品描述</p>
-                            <Input defaultValue={this.state.data.description} id="description"/>
+                            <Input type="textarea" rows={4} style={{height:'106px'}} defaultValue={this.state.data.description} id="description"/>
                             <p>奖品类型</p>
                             <Select size="large" defaultValue={this.state.data.prizeType}
-                                    style={{width: '150px', height: '36px', marginTop: '24px'}}
+                                    style={{width: '250px', height: '36px', marginTop: '24px'}}
                                     onSelect={(value)=> {
                                         this.setState({
                                             prizeType: value
@@ -167,7 +167,7 @@ export default class PagChange extends React.Component {
                                 <Option value="10元购">10元购</Option>
                             </Select>
                             <p>商品URL</p>
-                            <Input defaultValue={this.state.data.goodsUrl} id="goodsUrl"/>
+                            <Input type="textarea" rows={4} style={{height:'72px'}} defaultValue={this.state.data.goodsUrl} id="goodsUrl"/>
                             <p>广告视频</p>
                             <Upload
                                 name="file"

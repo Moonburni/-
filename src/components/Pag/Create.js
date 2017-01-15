@@ -138,20 +138,20 @@ export default class Create extends React.Component {
                     <p>赞助商</p>
                     <Input placeholder='' id="sponsor"/>
                     <p>奖品描述</p>
-                    <Input placeholder='' id="description"/>
+                    <Input  type="textarea" rows={4} style={{height:'106px'}} placeholder='' id="description"/>
                     <p>奖品类型</p>
                     <Select size="large" placeholder="请选择奖品类型" onSelect={(value)=> {
                         this.setState({
                             prizeType: value
                         })
                     }}
-                            style={{width: '150px', height: '36px', marginTop: '24px'}}>
+                            style={{width: '250px', height: '36px', marginTop: '24px'}}>
                         <Option value="0元购">0元购</Option>
                         <Option value="1元购">1元购</Option>
                         <Option value="10元购">10元购</Option>
                     </Select>
                     <p>商品URL</p>
-                    <Input placeholder='' id="goodsUrl"/>
+                    <Input type="textarea" rows={4} style={{height:'72px'}} placeholder='' id="goodsUrl"/>
                     <p>广告视频</p>
                     <Upload
                              name="file"
