@@ -103,14 +103,14 @@ export default class ClockChange extends React.Component {
                 });
             });
         getSingleClockData(this.props.params.id).then(({jsonResult})=> {
+            let data = jsonResult.data
             console.log(jsonResult.data);
+            let selectedSuperRpKeys = data.superRpPoolSettings.map(s => s.superRpId)
+            let selectedBlessRpKeys = data.blessRpPoolSettings.map(b => b.blessRpId)
             this.setState({
-                blessRpPoolSettings: jsonResult.data.blessRpPoolSettings,
-                superRpPoolSettings: jsonResult.data.superRpPoolSettings,
-                endDayTime: jsonResult.data.endDayTime,
-                endHourTime:jsonResult.data.endHourTime,
-                startDayTime:jsonResult.data.startDayTime,
-                startHourTime: jsonResult.data.startHourTime,
+                ...data,
+                selectedRowKeys: selectedSuperRpKeys,
+                selectedRowKeysOther: selectedBlessRpKeys,
                 bodyBuild:true
             });
         });
@@ -127,6 +127,16 @@ export default class ClockChange extends React.Component {
         // console.log('selectedRowKeys changed: ', selectedRowKeys);
         this.setState({selectedRowKeysOther});
     };
+
+    getBlessRpNum(blessRpId) {
+      let setting = this.state.blessRpPoolSettings.find((s => s.blessRpId === blessRpId))
+      return setting ? setting.num : ''
+    }
+
+    getSuperRpNum(superRpId) {
+      let setting = this.state.superRpPoolSettings.find((s => s.superRpId === superRpId))
+      return setting ? setting.num : ''
+    }
 
 
     render = ()=> {
@@ -296,9 +306,12 @@ export default class ClockChange extends React.Component {
         }, {
             title: '输入数量',
             key: 'action',
-            render: (text, record) => (
-                <Input placeholder={`请输入数量小于${record.remain}`} id={record.superRpId}/>
-            ),
+            render: (text, record) =>{
+              let num = this.getSuperRpNum(record.superRpId)
+              return (
+                  <Input placeholder={`请输入数量小于${record.remain}`} id={record.superRpId} defaultValue={num}/>
+              )
+            },
         }];
 
         const columnsOther = [{
@@ -306,15 +319,17 @@ export default class ClockChange extends React.Component {
             dataIndex: 'imageUrl',
             render: (text, record)=>(<img src={text} style={{width: '50px'}}/>)
         }, {
-            title: '上限剩余',
-            dataIndex: 'upperLimit',
-            render: ()=>(<span>无限制</span>)
+            title: '标题',
+            dataIndex: 'blessWord',
         }, {
             title: '输入数量',
             key: 'action',
-            render: (text, record) => (
-                <Input placeholder={`请输入数量`} id={record.blessRpId}/>
-            ),
+            render: (text, record) => {
+              let num = this.getBlessRpNum(record.blessRpId)
+              return (
+                  <Input placeholder={`请输入数量`} id={record.blessRpId} defaultValue={num} />
+              )
+            },
         }];
 
         const {selectedRowKeys} = this.state;
@@ -324,7 +339,7 @@ export default class ClockChange extends React.Component {
         };
         const {selectedRowKeysOther} = this.state;
         const rowSelectionOther = {
-            selectedRowKeysOther,
+            selectedRowKeys: selectedRowKeysOther,
             onChange: this.onSelectChangeOther,
         };
 
@@ -455,7 +470,7 @@ export default class ClockChange extends React.Component {
                         </Modal>
                         <Modal
                             visible={this.state.visibleOther}
-                            title="添加超级红包"
+                            title="添加祝福红包"
                             onOk={this.handleOkOther}
                             onCancel={this.handleCancelOther}
                             footer={[
