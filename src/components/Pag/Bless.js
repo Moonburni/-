@@ -89,31 +89,36 @@ export default class Bless extends React.Component {
             imageUrl: this.state.imageUrl,
             blessWord: this.state.value || this.state.singleData.blessWord
         };
-        if (this.state.singleData != '') {
-            putBlessData(this.state.singleData.blessRpId, data).then(()=> {
-                getBlessData()
-                    .then(({jsonResult}) => {
-                        // console.log(jsonResult.data);
+        if(data.imageUrl != ''&& data.blessWord != ''){
+            if (this.state.singleData != '') {
+                putBlessData(this.state.singleData.blessRpId, data).then(()=> {
+                    getBlessData()
+                        .then(({jsonResult}) => {
+                            // console.log(jsonResult.data);
+                            this.setState({
+                                dataSource: jsonResult.data,
+                                count: jsonResult.data.length,
+                                singleData: '',
+                                visible: false,
+                                imageUrl: '',
+                                value:''
+                            });
+                        });
+                })
+            }
+            else {
+                postBlessData(data).then(
+                    ({jsonResult})=> {
                         this.setState({
-                            dataSource: jsonResult.data,
-                            count: jsonResult.data.length,
-                            singleData: '',
+                            dataSource: [jsonResult.data, ...this.state.dataSource],
                             visible: false,
-                            imageUrl: '',
                             value:''
                         });
-                    });
-            })
-        } else {
-            postBlessData(data).then(
-                ({jsonResult})=> {
-                    this.setState({
-                        dataSource: [jsonResult.data, ...this.state.dataSource],
-                        visible: false,
-                        value:''
-                    });
-                }
-            );
+                    }
+                );
+            }
+        }else{
+            message.error('请填完所有数据',3)
         }
     };
     handleCancel = (e)=> {

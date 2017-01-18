@@ -14,14 +14,17 @@ export default class SuperList extends React.Component {
             title: '奖品名称',
             dataIndex: 'prizeName',
             key: 'prizeName',
+            width:'20%'
         }, {
             title: '奖品描述',
             dataIndex: 'description',
             key: 'description',
+            width:'55%'
         }, {
-            title: '上限',
-            dataIndex: 'upperLimit',
+            title: '上限剩余',
+            dataIndex: 'remain',
             key: 'upperLimit',
+            width:'10%'
         }, {
             title: '操作',
             key: 'action',

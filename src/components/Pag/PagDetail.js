@@ -64,7 +64,7 @@ export default class PagDetail extends React.Component {
                                 <span>赞助商</span>
                                 <div>{this.state.data.sponsor}</div>
                                 <span>奖品描述</span>
-                                <div>{this.state.data.description}</div>
+                                <div style={{height:'auto'}}>{this.state.data.description}</div>
                                 <span>奖品类型</span>
                                 <div>{this.state.data.prizeType}</div>
                                 <span>商品URL</span>
