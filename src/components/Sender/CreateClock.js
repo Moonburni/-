@@ -151,13 +151,19 @@ export default class CreateClock extends React.Component {
                 blessRpPoolSettings: this.state.blessRpPoolSettings,
                 totalNum: num
             };
-            // console.log(data);
-            postHourData(data).then(()=> {
-                message.success('保存成功',3);
-                hashHistory.push('/clockLIst')
-            }).catch((error)=> {
-                message.error('提交数据有误，或数据不全', 3)
-            })
+            console.log(data);
+            if((data.endHourTime && data.endDayTime && data.startHourTime && data.startDayTime
+                && data.superRpPoolSettings && data.blessRpPoolSettings && data.totalNum) != '')
+            {
+                postHourData(data).then(()=> {
+                    message.success('保存成功',3);
+                    hashHistory.push('/clockLIst')
+                }).catch((error)=> {
+                    message.error(error, 3)
+                })
+            }else {
+                message.error('请填写所有信息再提交',3)
+            }
         };
 
         const blessBuild = ()=> {

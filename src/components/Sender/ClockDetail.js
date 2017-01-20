@@ -27,8 +27,8 @@ export default class ClockDetail extends React.Component {
         const showConfirm = ()=> {
             let that = this;
             confirm({
-                title: '是否删除此红包?',
-                content: '删除之后将无法恢复',
+                title: '是否删除此红包?删除之后不可恢复',
+                content: '如果红包已经开始定时发送，请谨慎操作（尤其是在设置整点前后5~10分钟，如果修改可能会导致系统数据错乱，甚至系统崩溃，请谨慎操作）',
                 onOk() {
                     delSingleHourData(that.props.params.id).then(()=> {
                         hashHistory.push('/clockList')
@@ -52,32 +52,37 @@ export default class ClockDetail extends React.Component {
                                     width: '200px',
                                     height: '35px',
                                     backgroundColor: '#F06444',
-                                    color:'white',
-                                    textAlign:'center',
-                                    marginTop:'6px',
-                                    lineHeight:'35px',
-                                    marginLeft:'70px',
-                                    borderRadius:'5px'
+                                    color: 'white',
+                                    textAlign: 'center',
+                                    marginTop: '6px',
+                                    lineHeight: '35px',
+                                    marginLeft: '70px',
+                                    borderRadius: '5px'
                                 }}>
-                                    <p style={{float:'left',marginLeft:'25px',maxWidth:'120px',overflow:'hidden'}}>{item.blessRp.blessWord}</p>
-                                    <p style={{float:'right',marginRight:'25px'}}>{item.num}</p>
+                                    <p style={{
+                                        float: 'left',
+                                        marginLeft: '25px',
+                                        maxWidth: '120px',
+                                        overflow: 'hidden'
+                                    }}>{item.blessRp.blessWord}</p>
+                                    <p style={{float: 'right', marginRight: '25px'}}>{item.num}</p>
                                 </span>
                             )
                         })}
                     </span>
                 )
             } else {
-                return  <span style={{
+                return <span style={{
                     display: 'inline-block',
                     width: '200px',
                     height: '35px',
                     backgroundColor: '#F06444',
-                    color:'white',
-                    textAlign:'center',
-                    marginTop:'6px',
-                    lineHeight:'35px',
-                    marginLeft:'70px',
-                    borderRadius:'5px'
+                    color: 'white',
+                    textAlign: 'center',
+                    marginTop: '6px',
+                    lineHeight: '35px',
+                    marginLeft: '70px',
+                    borderRadius: '5px'
                 }}>
                                    暂无
                                 </span>
@@ -95,15 +100,20 @@ export default class ClockDetail extends React.Component {
                                     width: '200px',
                                     height: '35px',
                                     backgroundColor: '#F06444',
-                                    color:'white',
-                                    textAlign:'center',
-                                    marginTop:'6px',
-                                    lineHeight:'35px',
-                                    marginLeft:'70px',
-                                    borderRadius:'5px'
+                                    color: 'white',
+                                    textAlign: 'center',
+                                    marginTop: '6px',
+                                    lineHeight: '35px',
+                                    marginLeft: '70px',
+                                    borderRadius: '5px'
                                 }}>
-                                    <p style={{float:'left',marginLeft:'25px',maxWidth:'120px',overflow:'hidden'}}>{item.superRp.prizeName}</p>
-                                    <p style={{float:'right',marginRight:'25px'}}>{item.num}</p>
+                                    <p style={{
+                                        float: 'left',
+                                        marginLeft: '25px',
+                                        maxWidth: '120px',
+                                        overflow: 'hidden'
+                                    }}>{item.superRp.prizeName}</p>
+                                    <p style={{float: 'right', marginRight: '25px'}}>{item.num}</p>
                                 </span>
                             )
                         })}
@@ -115,16 +125,30 @@ export default class ClockDetail extends React.Component {
                     width: '200px',
                     height: '35px',
                     backgroundColor: '#F06444',
-                    color:'white',
-                    textAlign:'center',
-                    marginTop:'6px',
-                    lineHeight:'35px',
-                    marginLeft:'70px',
-                    borderRadius:'5px'
+                    color: 'white',
+                    textAlign: 'center',
+                    marginTop: '6px',
+                    lineHeight: '35px',
+                    marginLeft: '70px',
+                    borderRadius: '5px'
                 }}>
                                    暂无
                                 </span>
             }
+        };
+
+        const showConfirm1 = ()=> {
+            let th = this;
+            confirm({
+                title: '是否编辑?',
+                content: '如果红包已经开始定时发送，请谨慎编辑（尤其是在设置整点前后5~10分钟，如果修改可能会导致系统数据错乱，甚至系统崩溃，请谨慎操作）',
+                onOk() {
+                    hashHistory.push(`/clockChange${th.props.params.id}`)
+                },
+                onCancel() {
+                },
+            });
+
         };
 
         const bodyBuild = ()=> {
@@ -132,7 +156,7 @@ export default class ClockDetail extends React.Component {
                 return (
                     <div className="pagDetail">
                         <p onClick={showConfirm}>删除</p>
-                        <p><Link to={`/clockChange${this.props.params.id}`}>编辑</Link></p>
+                        <p onClick={showConfirm1}>编辑</p>
                         <div className="LaunchDetail">
                             <div className="textContent">
                                 <span>选择日期</span>
@@ -142,8 +166,10 @@ export default class ClockDetail extends React.Component {
                                 <span>选择时段</span>
                                 <div> {this.state.data.startHourTime}:00:00~{this.state.data.endHourTime}:00:00</div>
                                 <span>奖池设计</span>
-                                <div style={{height:'auto'}}><span style={{position:'absolute'}}>超级红包:</span>{superBuild()}</div>
-                                <div style={{height:'auto'}}><span style={{position:'absolute'}}>祝福红包:</span>{blessBuild()}</div>
+                                <div style={{height: 'auto'}}><span
+                                    style={{position: 'absolute'}}>超级红包:</span>{superBuild()}</div>
+                                <div style={{height: 'auto'}}><span
+                                    style={{position: 'absolute'}}>祝福红包:</span>{blessBuild()}</div>
                             </div>
                         </div>
                     </div>

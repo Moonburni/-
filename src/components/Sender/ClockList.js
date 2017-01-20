@@ -57,8 +57,8 @@ export default class ClockList extends React.Component {
         return (
             ()=> {
                 confirm({
-                    title: '是否删除此红包?',
-                    content: '删除之后将无法恢复，并且会损失这段时间的红包发送哦？',
+                    title: '是否删除此红包?删除之后不可恢复',
+                    content: '如果红包已经开始定时发送，请谨慎操作（尤其是在设置整点前后5~10分钟，如果修改可能会导致系统数据错乱，甚至系统崩溃，请谨慎操作）',
                     onOk() {
                         delSingleHourData(id).then(()=> {
                             getHourData()
@@ -82,8 +82,8 @@ export default class ClockList extends React.Component {
         return (
             ()=> {
                 confirm({
-                    title: '是否修改此红包?',
-                    content: '修改之后会损失这段时间的红包发送哦？',
+                    title: '是否编辑?',
+                    content: '如果红包已经开始定时发送，请谨慎编辑（尤其是在设置整点前后5~10分钟，如果修改可能会导致系统数据错乱，甚至系统崩溃，请谨慎操作）',
                     onOk() {
                         hashHistory.push(`/clockChange${id}`)
                     },
