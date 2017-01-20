@@ -2,6 +2,7 @@ import React from 'react'
 import {Table,Modal,message} from 'antd'
 import {Link} from 'react-router'
 import {getHourData,delSingleHourData} from '../Server/Server'
+import {hashHistory} from "react-router"
 
 
 const confirm = Modal.confirm;
@@ -32,7 +33,7 @@ export default class ClockList extends React.Component {
                 <span>
                    <Link to={`/clockDetail${record.hourRpSettingId}`}>查看</Link>
                    <span className="ant-divider"/>
-                   <Link to={`/clockChange${record.hourRpSettingId}`}>编辑</Link>
+                   <a onClick={this.showConfirm1(record.hourRpSettingId)}>编辑</a>
                    <span className="ant-divider"/>
                    <a onClick={this.showConfirm(record.hourRpSettingId)}>删除</a>
                 </span>
@@ -57,7 +58,7 @@ export default class ClockList extends React.Component {
             ()=> {
                 confirm({
                     title: '是否删除此红包?',
-                    content: '删除之后将无法恢复',
+                    content: '删除之后将无法恢复，并且会损失这段时间的红包发送哦？',
                     onOk() {
                         delSingleHourData(id).then(()=> {
                             getHourData()
@@ -70,6 +71,21 @@ export default class ClockList extends React.Component {
                         }).catch((err)=> {
                             message.error(err, 3)
                         })
+                    },
+                    onCancel() {
+                    },
+                });
+            }
+        )
+    };
+    showConfirm1 = (id)=> {
+        return (
+            ()=> {
+                confirm({
+                    title: '是否修改此红包?',
+                    content: '修改之后会损失这段时间的红包发送哦？',
+                    onOk() {
+                        hashHistory.push(`/clockChange${id}`)
                     },
                     onCancel() {
                     },

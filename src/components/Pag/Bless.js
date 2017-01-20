@@ -89,7 +89,7 @@ export default class Bless extends React.Component {
             imageUrl: this.state.imageUrl,
             blessWord: this.state.value || this.state.singleData.blessWord
         };
-        if(data.imageUrl != ''&& data.blessWord != ''){
+        if(data.imageUrl != ''|| data.blessWord != ''){
             if (this.state.singleData != '') {
                 putBlessData(this.state.singleData.blessRpId, data).then(()=> {
                     getBlessData()

@@ -156,7 +156,7 @@ export default class CreateClock extends React.Component {
                 message.success('保存成功',3);
                 hashHistory.push('/clockLIst')
             }).catch((error)=> {
-                message.error('请填完所有数据后提交', 3)
+                message.error('提交数据有误，或数据不全', 3)
             })
         };
 
