@@ -159,11 +159,15 @@ export default class ClockChange extends React.Component {
                 totalNum: num
             };
             console.log(data);
+            if (data.superRpPoolSettings.length === 0 || data.blessRpPoolSettings.length === 0) {
+              message.error('请将奖池设计完整', 3)
+              return false
+            }
             putSingleHourData(this.props.params.id,data).then(()=> {
                 message.success('保存成功',3);
                 hashHistory.push('/clockLIst')
             }).catch((error)=> {
-                message.error('请填完所有数据后提交', 3)
+                message.error(error, 3)
             })
         };
 

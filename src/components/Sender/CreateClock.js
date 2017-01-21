@@ -152,8 +152,12 @@ export default class CreateClock extends React.Component {
                 totalNum: num
             };
             console.log(data);
+            if (data.superRpPoolSettings.length === 0 || data.blessRpPoolSettings.length === 0) {
+              message.error('请将奖池设计完整', 3)
+              return false
+            }
             if((data.endHourTime && data.endDayTime && data.startHourTime && data.startDayTime
-                && data.superRpPoolSettings && data.blessRpPoolSettings && data.totalNum) != '')
+                 && data.totalNum) != '')
             {
                 postHourData(data).then(()=> {
                     message.success('保存成功',3);
