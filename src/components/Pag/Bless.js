@@ -92,18 +92,19 @@ export default class Bless extends React.Component {
         if(data.imageUrl != ''|| data.blessWord != ''){
             if (this.state.singleData != '') {
                 putBlessData(this.state.singleData.blessRpId, data).then(()=> {
-                    getBlessData()
-                        .then(({jsonResult}) => {
-                            // console.log(jsonResult.data);
-                            this.setState({
-                                dataSource: jsonResult.data,
-                                count: jsonResult.data.length,
-                                singleData: '',
-                                visible: false,
-                                imageUrl: '',
-                                value:''
-                            });
-                        });
+                    return getBlessData()
+                }).then(({jsonResult}) => {
+                    // console.log(jsonResult.data);
+                    this.setState({
+                        dataSource: jsonResult.data,
+                        count: jsonResult.data.length,
+                        singleData: '',
+                        visible: false,
+                        imageUrl: '',
+                        value:''
+                    });
+                }).catch((error)=> {
+                    message.error(error, 3)
                 })
             }
             else {
@@ -115,7 +116,9 @@ export default class Bless extends React.Component {
                             value:''
                         });
                     }
-                );
+                ).catch((error)=> {
+                    message.error(error, 3)
+                });
             }
         }else{
             message.error('请填完所有数据',3)

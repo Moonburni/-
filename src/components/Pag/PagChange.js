@@ -107,6 +107,8 @@ export default class PagChange extends React.Component {
                 && value.prizeType && value.sponsor && value.upperLimit) != '') {
                 putSingleSuperData(this.props.params.id, value).then(()=> {
                     hashHistory.push('/superList')
+                }).catch((error)=> {
+                    message.error(error, 3)
                 })
             } else {
                 message.error('请填写完整信息', 3)
