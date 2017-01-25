@@ -165,7 +165,7 @@ export default class ClockChange extends React.Component {
                 blessRpPoolSettings: this.state.blessRpPoolSettings,
                 totalNum: num
             };
-            console.log(data);
+            // console.log(data);
             if (data.superRpPoolSettings.length === 0 || data.blessRpPoolSettings.length === 0) {
               message.error('请将奖池设计完整', 3)
               return false
@@ -321,8 +321,8 @@ export default class ClockChange extends React.Component {
                 dataIndex: 'num',
                 render: (text, record) =>{
                   return (
-                      <input ref={record.superRpId} placeholder={`请输入数量小于${record.superRp.remain}`}
-                          id={record.superRp.superRpId} defaultValue={text}
+                      <input placeholder={`请输入数量小于${record.superRp.remain}`}
+                          defaultValue={text}
                           onChange={handleNumChange(record.superRpId)}/>
                   )
                 },
