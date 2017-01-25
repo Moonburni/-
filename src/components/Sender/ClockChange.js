@@ -23,11 +23,13 @@ export default class ClockChange extends React.Component {
         blessRpPoolSettings: [],
         loading: false,
         visible: false,
-        selectedRowKeys: [],
         loadingOther: false,
         visibleOther: false,
+        selectedRowKeys: [],
         selectedRowKeysOther: [],
-        bodyBuild:false
+        bodyBuild:false,
+        currentPage: 1,
+        currentPageOther: 1
     };
 
     showModal = ()=> {
@@ -44,67 +46,44 @@ export default class ClockChange extends React.Component {
     handleOk = ()=> {
         this.setState({loading: true});
         setTimeout(() => {
-            let data = [];
-            this.state.selectedRowKeys.forEach((item, index)=> {
-                data.push({
-                        num: document.getElementById(item).value || this.state.data.filter((items)=> {
-                            return items.superRpId === item
-                        })[0].upperLimit,
-                        superRpId: item,
-                        superRp: this.state.data.filter((items)=> {
-                            return items.superRpId === item
-                        })[0]
-                    }
-                )
-            });
-            // console.log(data);
-            this.setState({loading: false, visible: false, superRpPoolSettings: data});
+            const { data, selectedRowKeys} = this.state;
+            let d = data.filter(d => selectedRowKeys.find(key => key===d.superRpId))
+            console.log(d);
+            this.setState({loading: false, visible: false, superRpPoolSettings: d});
         }, 1000);
     };
+
     handleOkOther = ()=> {
         this.setState({loadingOther: true});
         setTimeout(() => {
-            let data = [];
-            this.state.selectedRowKeysOther.forEach((item, index)=> {
-                data.push({
-                        num: document.getElementById(item).value || 100,
-                        blessRpId: item,
-                        blessRp: this.state.dataOther.filter((items)=> {
-                            return items.blessRpId === item
-                        })[0]
-                    }
-                )
-            });
-            // console.log(data);
+            const { dataOther, selectedRowKeysOther} = this.state;
+            let data = dataOther.filter(d => selectedRowKeysOther.find(key => key === d.blessRpId))
+            console.log(data);
             this.setState({loadingOther: false, visibleOther: false, blessRpPoolSettings: data});
         }, 1000);
     };
     handleCancel = ()=> {
-        this.setState({visible: false});
+        let selectedSuperRpKeys = this.state.superRpPoolSettings.map(s => s.superRpId)
+        this.setState({
+            selectedRowKeys: selectedSuperRpKeys,
+            bodyBuild:true,
+            visible: false
+        });
     };
     handleCancelOther = ()=> {
-        this.setState({visibleOther: false});
+        let selectedBlessRpKeys = this.state.blessRpPoolSettings.map(s => s.blessRpId)
+        this.setState({
+            selectedRowKeysOther: selectedBlessRpKeys,
+            bodyBuild:true,
+            visibleOther: false
+        });
     };
 
 
     componentWillMount() {
-        getSuperData()
-            .then(({jsonResult}) => {
-                // console.log(jsonResult.data);
-                this.setState({
-                    data: jsonResult.data,
-                });
-            });
-        getBlessData()
-            .then(({jsonResult}) => {
-                // console.log(jsonResult.data);
-                this.setState({
-                    dataOther: jsonResult.data,
-                });
-            });
         getSingleClockData(this.props.params.id).then(({jsonResult})=> {
             let data = jsonResult.data
-            console.log(jsonResult.data);
+            // console.log(jsonResult.data);
             let selectedSuperRpKeys = data.superRpPoolSettings.map(s => s.superRpId)
             let selectedBlessRpKeys = data.blessRpPoolSettings.map(b => b.blessRpId)
             this.setState({
@@ -113,19 +92,47 @@ export default class ClockChange extends React.Component {
                 selectedRowKeysOther: selectedBlessRpKeys,
                 bodyBuild:true
             });
+            return getSuperData()
+        }).then(({jsonResult}) => {
+            this.setState({
+                data: jsonResult.data.map(d => {
+                    return {
+                        num: this.getSuperRpNum(d.superRpId),
+                        superRpId: d.superRpId,
+                        superRp: {...d}
+                    }
+                })
+            })
+            return getBlessData()
+        }).then(({jsonResult}) => {
+            this.setState({
+                dataOther: jsonResult.data.map(d => {
+                    return {
+                        num: this.getBlessRpNum(d.blessRpId),
+                        blessRp: {...d},
+                        blessRpId: d.blessRpId
+                    }
+                })
+            })
         });
 
     }
 
 
-    onSelectChange = (selectedRowKeys)=> {
-        // console.log('selectedRowKeys changed: ', selectedRowKeys);
-        this.setState({selectedRowKeys});
+    onSelectChange = (selectedRowKeys, selectedRows)=> {
+        if (selectedRows.some(r => !r.num)) {
+            message.error('请填写数量', 3);
+        } else {
+            this.setState({selectedRowKeys})
+        }
     };
 
-    onSelectChangeOther = (selectedRowKeysOther)=> {
-        // console.log('selectedRowKeys changed: ', selectedRowKeys);
-        this.setState({selectedRowKeysOther});
+    onSelectChangeOther = (selectedRowKeysOther, selectedRows)=> {
+        if (selectedRows.some(r => !r.num)) {
+            message.error('请填写数量', 3);
+        } else {
+            this.setState({selectedRowKeysOther});
+        }
     };
 
     getBlessRpNum(blessRpId) {
@@ -301,49 +308,87 @@ export default class ClockChange extends React.Component {
             })
         };
 
-        const columns = [{
-            title: '奖品名称',
-            dataIndex: 'prizeName',
-        }, {
-            title: '上限剩余',
-            dataIndex: 'remain',
-        }, {
-            title: '输入数量',
-            key: 'action',
-            render: (text, record) =>{
-              let num = this.getSuperRpNum(record.superRpId)
-              return (
-                  <Input placeholder={`请输入数量小于${record.remain}`} id={record.superRpId} defaultValue={num}/>
-              )
-            },
-        }];
+        const columns = [
+            {
+                title: '奖品名称',
+                dataIndex: 'superRp.prizeName',
+            }, {
+                title: '上限剩余',
+                dataIndex: 'superRp.remain',
+            }, {
+                title: '输入数量',
+                key: 'action',
+                dataIndex: 'num',
+                render: (text, record) =>{
+                  return (
+                      <input ref={record.superRpId} placeholder={`请输入数量小于${record.superRp.remain}`}
+                          id={record.superRp.superRpId} defaultValue={text}
+                          onChange={handleNumChange(record.superRpId)}/>
+                  )
+                },
+            }
+        ];
 
-        const columnsOther = [{
-            title: '祝福图片',
-            dataIndex: 'imageUrl',
-            render: (text, record)=>(<img src={text} style={{width: '50px'}}/>)
-        }, {
-            title: '标题',
-            dataIndex: 'blessWord',
-        }, {
-            title: '输入数量',
-            key: 'action',
-            render: (text, record) => {
-              let num = this.getBlessRpNum(record.blessRpId)
-              return (
-                  <Input placeholder={`请输入数量`} id={record.blessRpId} defaultValue={num} />
-              )
-            },
-        }];
+        var handleNumChange =  (superRpId) => {
+            return (e) => {
+                let data = this.state.data.map(d => {
+                    if (d.superRpId === superRpId) {
+                        return {
+                            ... d,
+                            num: e.target.value
+                        }
+                    } else {
+                        return d
+                    }
+                });
+                this.setState({data})
+            }
+        }
+
+        var handleNumChangeOther =  (blessRpId) => {
+            return (e) => {
+                let dataOther = this.state.dataOther.map(d => {
+                    if (d.blessRpId === blessRpId) {
+                        return {
+                            ... d,
+                            num: e.target.value
+                        }
+                    } else {
+                        return d
+                    }
+                });
+                this.setState({dataOther})
+            }
+        }
+
+        const columnsOther = [
+            {
+                title: '祝福图片',
+                dataIndex: 'blessRp.imageUrl',
+                render: (text, record)=>(<img src={text} style={{width: '50px'}}/>)
+            }, {
+                title: '标题',
+                dataIndex: 'blessRp.blessWord',
+            }, {
+                title: '输入数量',
+                key: 'action',
+                dataIndex: 'num',
+                render: (text, record) => {
+                  return (
+                      <input onChange={handleNumChangeOther(record.blessRpId)} placeholder={`请输入数量`} defaultValue={text} />
+                  )
+                },
+            }
+        ];
 
         const {selectedRowKeys} = this.state;
         const rowSelection = {
-            selectedRowKeys,
-            onChange: this.onSelectChange,
+            selectedRowKeys: [...selectedRowKeys],
+            onChange: this.onSelectChange
         };
         const {selectedRowKeysOther} = this.state;
         const rowSelectionOther = {
-            selectedRowKeys: selectedRowKeysOther,
+            selectedRowKeys: [...selectedRowKeysOther],
             onChange: this.onSelectChangeOther,
         };
 
@@ -469,7 +514,13 @@ export default class ClockChange extends React.Component {
                             <div>
 
                                 <Table rowKey={recode => recode.superRpId} rowSelection={rowSelection} columns={columns}
-                                       dataSource={this.state.data}/>
+                                       dataSource={this.state.data}
+                                       pagination={{
+                                           current: this.state.currentPage,
+                                           onChange: (current) => {
+                                               this.setState({ currentPage: current })
+                                           }
+                                       }}/>
                             </div>
                         </Modal>
                         <Modal
@@ -489,7 +540,13 @@ export default class ClockChange extends React.Component {
 
                                 <Table rowKey={recode => recode.blessRpId} rowSelection={rowSelectionOther}
                                        columns={columnsOther}
-                                       dataSource={this.state.dataOther}/>
+                                       dataSource={this.state.dataOther}
+                                       pagination={{
+                                           current: this.state.currentPageOther,
+                                           onChange: (current) => {
+                                               this.setState({ currentPageOther: current })
+                                           }
+                                       }}/>
                             </div>
                         </Modal>
                     </div>
