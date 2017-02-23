@@ -89,7 +89,7 @@ export default class Bless extends React.Component {
             imageUrl: this.state.imageUrl,
             blessWord: this.state.value || this.state.singleData.blessWord
         };
-        if(data.imageUrl != ''|| data.blessWord != ''){
+        if(data.imageUrl != '' && data.blessWord != ''){
             if (this.state.singleData != '') {
                 putBlessData(this.state.singleData.blessRpId, data).then(()=> {
                     return getBlessData()
@@ -159,7 +159,6 @@ export default class Bless extends React.Component {
     };
 
     handleChange1 = (e) => {
-        console.log(e.target.value);
         const value = e.target.value || this.state.singleData.blessWord;
         this.setState({
             value: value,
